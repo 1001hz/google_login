@@ -1,2 +1,2 @@
-# angular_project_template
-Basic node server with gulp from src to dist
+# google_login
+Angular module for Google API login

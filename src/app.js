@@ -2,15 +2,14 @@
 
     'use strict';
 
-    angular.module('app', []);
+    angular.module('app', ['app.google']);
 
     angular
-        .module('app')
-        .controller('testController', testController);
+        .module("app")
+        .config(['GoogleSrvProvider', function (GoogleSrvProvider) {
+            GoogleSrvProvider.setClientId("533519621566-g873o4k46kkcmsmoci6n9a72obsuqm15");
+        }]);
 
-    function testController() {
 
-        this.speak = "Lookin' good";
-    }
 
 })();
