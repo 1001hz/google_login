@@ -43,10 +43,10 @@
                     });
                     return signedInPromise;
                 },
-                onClick: function (elemId) {
+                onClick: function (elem) {
                     var onClickDefer = $q.defer();
                     var onClickPromise = onClickDefer.promise;
-                    self.auth2.attachClickHandler(document.getElementById(elemId),
+                    self.auth2.attachClickHandler(elem,
                         {},
                         function (googleUser) {
                             onClickDefer.resolve(googleUser);

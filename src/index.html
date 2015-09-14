@@ -23,14 +23,30 @@
 
 </head>
 
-<body data-ng-app="app">
+<body>
 
 <div data-ng-controller="testController as testCtrl">
-    {{testCtrl.speak}}
+    <div class="btn-group" role="group">
+        <button data-ng-if="!testCtrl.user" google-signin type="button" class="btn btn-default google-group-btn">Sign in with Google</button>
+        <button data-ng-if="testCtrl.user" type="button" class="btn btn-default google-group-btn">Sign out</button>
+    </div>
 </div>
+
+
 
     <!-- inject:js -->
     <!-- endinject -->
+
+<script>
+    (function () {
+        window.onGoogleApiLoad = function () {
+            angular.element(document).ready(function () {
+                angular.bootstrap(document, ['app']);
+            });
+        }
+    })();
+</script>
+<script src="https://apis.google.com/js/api:client.js?onload=onGoogleApiLoad"></script>
 
 </body>
 

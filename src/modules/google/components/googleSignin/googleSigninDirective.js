@@ -10,15 +10,12 @@
 
     function googleSignin(GoogleSrv, $rootScope, AUTH_EVENTS) {
         return {
-            restrict: 'E',
-            template:'<div class="btn-group" role="group"><button type="button" class="btn btn-default google-group-btn"><i class="fa fa-google"></i></button> <button type="button" class="btn btn-default google-group-btn" id="googleBtn">Sign in with Google</button><span data-ng-if="loading"><loader loading="loading"></loader></span></div>',
-            replace: true,
-            transclude: false,
+            restrict: 'A',
             link: link
         }
 
 
-        function link(scope, element, attrs) {
+        function link(scope, elem, attrs) {
             scope.loading = false;
             GoogleSrv.loadAuth().then(googleApiLoaded).catch(googleApiFailedToLoad);
 
@@ -33,9 +30,11 @@
                     }
                 }).catch(googleApiSignedInCheckFailed);
 
-                var buttonId = attrs.buttonId;
-                if (document.getElementById(buttonId) !== undefined) {
-                    GoogleSrv.onClick(buttonId).then(setUser).catch(googleApiButtonBindFailed);
+                if(elem[0] !== undefined){
+                    GoogleSrv.onClick(elem[0]).then(setUser).catch(googleApiButtonBindFailed);
+                }
+                else{
+                    console.error("Can't find login button");
                 }
 
             }
