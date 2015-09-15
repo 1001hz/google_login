@@ -10,30 +10,20 @@
 
     function googleSignout(GoogleSrv, $rootScope, AUTH_EVENTS) {
         return {
-            restrict: 'E',
-            templateUrl: '/views/googleSignoutDirective.html',
-            replace: true,
+            restrict: 'A',
             link: link
         }
 
+        function link(scope, elem, attrs) {
 
-        function link(scope, element, attrs) {
-
-            scope.logOut = logOut;
-
-            GoogleSrv.getCurrentUser(function (googleUser) {
-                if (googleUser !== null) {
-                    scope.signedIn = true;
-                }
-                else {
-                    scope.signedIn = false;
-                }
-            });
+            elem.on('click', logOut);
 
             function logOut() {
                 GoogleSrv.signOut(function (success) {
                     if (success) {
-                        $rootScope.$broadcast(AUTH_EVENTS.logOutSuccess, { user: null });
+                        scope.$apply(function(){
+                            $rootScope.$broadcast(AUTH_EVENTS.logOutSuccess, { user: null });
+                        });
                     }
                 });
             }

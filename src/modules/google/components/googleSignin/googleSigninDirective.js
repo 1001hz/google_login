@@ -14,29 +14,50 @@
             link: link
         }
 
-
         function link(scope, elem, attrs) {
-            scope.loading = false;
-            GoogleSrv.loadAuth().then(googleApiLoaded).catch(googleApiFailedToLoad);
+
+            disableButton();
+
+            GoogleSrv.loadAuth()
+                .then(googleApiLoaded)
+                .catch(googleApiFailedToLoad);
+
 
             function googleApiLoaded() {
 
-                GoogleSrv.signedIn().then(function (val) {
-                    if (val) {
-                        scope.loading = true;
-                        GoogleSrv.getCurrentUser(function (googleUser) {
-                            setUser(googleUser);
-                        });
-                    }
-                }).catch(googleApiSignedInCheckFailed);
+                enableButton();
+
+                elem.on('click', function(){
+                    disableButton();
+                });
+
+                GoogleSrv.signedIn()
+                    .then(function (val) {
+                        if (val) {
+                            scope.loading = true;
+                            GoogleSrv.getCurrentUser(function (googleUser) {
+                                setUser(googleUser);
+                            });
+                        }
+                    })
+                    .catch(googleApiSignedInCheckFailed)
+                    .finally(enableButton);
+
 
                 if(elem[0] !== undefined){
-                    GoogleSrv.onClick(elem[0]).then(setUser).catch(googleApiButtonBindFailed);
+                    GoogleSrv.onClick(elem[0])
+                        .then(setUser)
+                        .catch(googleApiButtonBindFailed)
+                        .finally(enableButton);
                 }
                 else{
                     console.error("Can't find login button");
                 }
 
+            }
+
+            function googleApiFailedToLoad(error){
+                console.error(error);
             }
 
             function setUser(googleUser) {
@@ -50,22 +71,27 @@
                     idToken: googleUser.getAuthResponse().id_token
                 }
 
-                scope.loading = false;
                 $rootScope.$broadcast(AUTH_EVENTS.logInSuccess, {user: user});
-            }
-
-
-            function googleApiFailedToLoad(error){
-                console.error(error);
-            }
-
-            function googleApiSignedInCheckFailed(error){
-                console.error(error);
             }
 
             function googleApiButtonBindFailed(error){
                 console.error(error);
             }
+
+            function disableButton(){
+                elem.prop('disabled',true);
+            }
+
+            function enableButton(){
+                elem.prop('disabled',false);
+            }
+
+
+            function googleApiSignedInCheckFailed(error){
+                console.error(error);
+            }
+
+
 
 
         }

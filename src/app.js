@@ -21,6 +21,7 @@
         vm.user = null;
 
         $rootScope.$on(AUTH_EVENTS.logInSuccess, setUser);
+        $rootScope.$on(AUTH_EVENTS.logOutSuccess, setUser);
 
         function setUser(event, args){
             vm.user = args.user;
